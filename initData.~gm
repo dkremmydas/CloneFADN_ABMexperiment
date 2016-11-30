@@ -20,7 +20,7 @@ farm_active(f)=1;
 
 *Prepare data
 parameter xlData(f,*,*);
-$call "Gdxxrw ./data/data.2000.xlsx output=tmp1 par=xlData Rng=template!A1:L2005 cdim=2 rdim=1"
+$call "Gdxxrw ./data/data.2000.xlsx output=tmp1 par=xlData Rng=template!A1:L2004 cdim=2 rdim=1"
 $GDXin tmp1.gdx
 $load xlData
 $GDXIN

@@ -2,11 +2,7 @@
 
 ::------------------------
 :: configuration
-SET repetitions=12
-SET Rscript="C:\Program Files\R\R-3.3.1\bin\Rscript.exe"
-SET randomNumbersPerRepetition=400
-SET YEARS=6
-set SAMPLES=200
+call configuration.bat
 
 
 ::------------------------
@@ -20,8 +16,8 @@ SET ccd=%cd:\=\\%
 %Rscript% -e "setwd('%ccd%');data.full=data.frame(t=seq(1,%YEARS%));save(data.full,file='results/data.full');"
 %Rscript% -e "setwd('%ccd%');data.sample=data.frame(t=seq(1,%YEARS%));save(data.sample,file='results/data.sample');"
 
-::create PRNG
-%Rscript% -e "setwd('%ccd%');r=runif(%randomNumbersPerRepetition%*%repetitions%);chunks <- split(r, ceiling(seq_along(r)/%randomNumbersPerRepetition%));for(n in names(chunks)) {write(chunks[[n]],file=paste('data/rnd/',n,'.txt',sep=''),ncolumns = 1);write(c(1),file=paste('data/rnd/',n,'.pointer.txt',sep=''),ncolumns = 1)}"
+::create PRNG (pseudo numbers)
+%Rscript% -e "setwd('%ccd%');r=rnorm(%randomNumbersPerRepetition%*%repetitions%,0,.1);chunks <- split(r, ceiling(seq_along(r)/%randomNumbersPerRepetition%));for(n in names(chunks)) {write(chunks[[n]],file=paste('data/rnd/',n,'.txt',sep=''),ncolumns = 1);write(c(1),file=paste('data/rnd/',n,'.pointer.txt',sep=''),ncolumns = 1)}"
 
 
 ::------------------------

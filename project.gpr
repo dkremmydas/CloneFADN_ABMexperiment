@@ -1,0 +1,296 @@
+[PROJECT]
+
+[RP:RUNLANMARKET.BAT]
+1=
+
+[RP:RUNLANDMARKET.BAT]
+1=
+
+[RP:MODEL]
+1=
+
+[RP:MODEL.V1]
+1=
+
+[GDXDISP: age Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: c Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: f Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: LaC Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: LandMarketIn Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: LandMarketOut Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: LaO Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: LaRi Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: LaRo Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Lb Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: p Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: rql Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: vc Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: wl Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: y Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: xlData Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[RP:DEFINITIONS]
+1=
+
+[GDXDISP: labor_constraint Equ 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: land_constraint Equ 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: wCapital_constraint Equ 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[RP:MODEL.V3]
+1=
+
+[GDXDISP: xL Var 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[RP:MODEL.V2]
+1=
+
+[GDXDISP: consN Par 0]
+PlaneDim=0
+RowDim=0
+Squeeze=1
+Order=
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: farm_active Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: fmembers Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: sfp Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Wc Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: xC Var 2]
+PlaneDim=1
+RowDim=1
+Squeeze=1
+Order=3,2,1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: results Par 4]
+PlaneDim=2
+RowDim=1
+Squeeze=1
+Order=1,4,3,2
+Decim=7
+PlaneRownr=-1
+PlaneFilter1=economic_results
+PlaneFilter2=active
+
+[RP:DATA.DEFINITIONS.SAMPLING]
+1=
+
+[RP:UNTITLED_1]
+1=
+
+[RP:MODEL.DEFINITIONS]
+1=
+
+[RP:UPDATE_ACCOUNTS]
+1=
+
+[RP:EXAMPLE_FOR_SAMPLING_ASSIGNMENT]
+1=
+
+[RP:CROP_PLAN]
+1=
+
+[RP:DATA.DEFINITIONS]
+1=
+
+[RP:INITDATA.SAMPLING]
+1=
+
+[RP:WRITE_RESULTS_FORR]
+1=
+
+[RP:INITDATA]
+1=
+
+[MRUFILES]
+1=C:\Users\jkr\Dropbox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\./data/sampling.txt
+2=C:\Users\jkr\Dropbox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\crop_plan.gms
+3=C:\Users\jkr\Dropbox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\data\data.gdx
+4=C:\Users\jkr\Dropbox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\data\results.gdx
+5=C:\Users\jkr\Dropbox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\example_for_sampling_assignment.gms
+6=C:\Users\jkr\Dropbox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\example_for_sampling_assignment.lst
+7=C:\Users\jkr\Dropbox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\update_accounts.gms
+
+[OPENWINDOW_1]
+FILE0=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\crop_plan.gms
+FILE1=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\data.definitions.gms
+FILE2=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\example_for_sampling_assignment.gms
+FILE3=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.gms
+FILE4=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.lst
+FILE5=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.sampling.gms
+FILE6=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\model.definitions.gms
+FILE7=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\update_accounts.gms
+FILE8=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\write_results_forR.gms
+FILE9=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.gms
+MAXIM=0
+TOP=0
+LEFT=0
+HEIGHT=634
+WIDTH=1294
