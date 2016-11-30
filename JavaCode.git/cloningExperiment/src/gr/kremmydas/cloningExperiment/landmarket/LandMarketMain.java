@@ -237,9 +237,6 @@ public class LandMarketMain {
 		public float getWta() {
 			return wta;
 		}
-		public void setWta(float wta) {
-			this.wta = wta;
-		}
 		public float getLandDemand() {
 			return LandDemand;
 		}
@@ -248,9 +245,6 @@ public class LandMarketMain {
 		}
 		public float getWtp() {
 			return wtp;
-		}
-		public void setWtp(float wtp) {
-			this.wtp = wtp;
 		}
 		
 		
