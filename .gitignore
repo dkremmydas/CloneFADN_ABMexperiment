@@ -1,0 +1,17 @@
+*
+!_clear.bat
+!clear_simulation.bat
+!crop_plan.gms
+!data.definitions.gms
+!example_for_sampling_assignment.gms
+!exp_compare_alive_farms.bat
+!initData.gms
+!initData.sampling.gms
+!model.definitions.gms
+!runSimulation.sampled.bat
+!runSimulation.full.bat
+!update_accounts.gms
+!write_results_forR.gms
+!/JavaCode.git/*
+!/JavaCode.git/cloningExperiment/src/
+!.gitignore
