@@ -2,20 +2,14 @@
 
 ::------------------------
 :: configuration
-set LMiterations=1000
-set YEARS=%2
+::set LMiterations=1000  -> SET at configuration.bat
+::set YEARS=%2  -> SET at configuration.bat
+::set SAMPLES=%3 -> SET at configuration.bat
+::set FARM_NUM=2000 -> SET at configuration.bat
+::set GAMS="%GAMS_ROOT%\gams.exe" -> SET at configuration.bat
+::SET GAMS_ROOT=C:\GAMS\win64\24.0 -> SET at configuration.bat
+
 set RESULTS_FOLDER=".\results\sample\"
-set SAMPLES=%3
-set FARM_NUM=2000
-
-
-::acer laptop --------------------------
-SET GAMS_ROOT=C:\GAMS\win64\24.0
-
-::pc@aua work -------------------------
-::SET GAMS_ROOT=D:\gams24.0
-
-set GAMS="%GAMS_ROOT%\gams.exe"
 
 cls
 

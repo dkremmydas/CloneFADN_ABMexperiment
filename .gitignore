@@ -4,6 +4,7 @@ data/*
 *.lst
 *.jar
 *.lxi
+*.~*
 lst/*
 log/*
 results/*

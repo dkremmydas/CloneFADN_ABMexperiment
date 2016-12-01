@@ -16,8 +16,11 @@ SET ccd=%cd:\=\\%
 %Rscript% -e "setwd('%ccd%');data.full=data.frame(t=seq(1,%YEARS%));save(data.full,file='results/data.full');"
 %Rscript% -e "setwd('%ccd%');data.sample=data.frame(t=seq(1,%YEARS%));save(data.sample,file='results/data.sample');"
 
-::create PRNG (pseudo numbers)
-%Rscript% -e "setwd('%ccd%');r=rnorm(%randomNumbersPerRepetition%*%repetitions%,0,.1);chunks <- split(r, ceiling(seq_along(r)/%randomNumbersPerRepetition%));for(n in names(chunks)) {write(chunks[[n]],file=paste('data/rnd/',n,'.txt',sep=''),ncolumns = 1);write(c(1),file=paste('data/rnd/',n,'.pointer.txt',sep=''),ncolumns = 1)}"
+::create PRNG (pseudo numbers) for prices
+%Rscript% -e "setwd('%ccd%');r=rnorm(%randomNumbersPerRepetition_Prices%*%repetitions%,0,.1);chunks <- split(r, ceiling(seq_along(r)/%randomNumbersPerRepetition%));for(n in names(chunks)) {write(chunks[[n]],file=paste('data/rnd/',n,'.prices.txt',sep=''),ncolumns = 1);write(c(1),file=paste('data/rnd/',n,'.prices.pointer.txt',sep=''),ncolumns = 1)}"
+
+::create PRNG (pseudo numbers) for Lm
+%Rscript% -e "setwd('%ccd%');r=rlnorm(%randomNumbersPerRepetition_LandMarket%*%repetitions%,0,.5);chunks <- split(r, ceiling(seq_along(r)/%randomNumbersPerRepetition%));for(n in names(chunks)) {write(chunks[[n]],file=paste('data/rnd/',n,'.prices.txt',sep=''),ncolumns = 1);write(c(1),file=paste('data/rnd/',n,'.prices.pointer.txt',sep=''),ncolumns = 1)}"
 
 
 ::------------------------

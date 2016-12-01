@@ -109,12 +109,13 @@ Decim=7
 PlaneRownr=-1
 
 [GDXDISP: vc Par 2]
-PlaneDim=0
-RowDim=2
+PlaneDim=1
+RowDim=1
 Squeeze=1
 Order=1,2
 Decim=7
-PlaneRownr=-1
+PlaneRownr=4
+PlaneFilter1=tob
 
 [GDXDISP: wl Par 0]
 PlaneDim=0
@@ -281,14 +282,15 @@ PlaneFilter2=active
 [OPENWINDOW_1]
 FILE0=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\crop_plan.gms
 FILE1=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\data.definitions.gms
-FILE2=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\example_for_sampling_assignment.gms
-FILE3=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.gms
-FILE4=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.lst
-FILE5=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.sampling.gms
-FILE6=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\model.definitions.gms
-FILE7=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\update_accounts.gms
-FILE8=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\write_results_forR.gms
-FILE9=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.gms
+FILE2=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\data\data.gdx
+FILE3=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\example_for_sampling_assignment.gms
+FILE4=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.gms
+FILE5=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.lst
+FILE6=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\initData.sampling.gms
+FILE7=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\model.definitions.gms
+FILE8=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\update_accounts.gms
+FILE9=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\write_results_forR.gms
+FILE10=D:\DropBox\CurrentProjects\Phd Proposal\03. Work on progress\P_Population synthesis_jasss\early experiment\CloneFADN_ABMexperiment\data\data.gdx
 MAXIM=0
 TOP=0
 LEFT=0
