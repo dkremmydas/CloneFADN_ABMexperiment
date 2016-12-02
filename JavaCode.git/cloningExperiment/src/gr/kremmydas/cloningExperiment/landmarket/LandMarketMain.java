@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
@@ -40,6 +41,18 @@ public class LandMarketMain {
 	private int loops;
 	private String logResult="loop\tb_id\twtp\ts_id\twta\tland\tprice\tcash";
 	
+	private ArrayList<Double> rnd = new ArrayList<>();
+	private int curRndIndex;
+	
+	/**
+	 * args[0]: (string) input.txt 
+	 * args[1]: (string) output.txt
+	 * args[2]: (int) Number of iterations
+	 * args[3]: (string) log file name
+	 * args[4]: (string) random numbers file
+	 * args[5]: (string) random number pointer file
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		
 		if(args.length==0) {System.exit(1);}
@@ -47,14 +60,33 @@ public class LandMarketMain {
 		LandMarketMain m = new LandMarketMain();
 		m.loops = Integer.parseInt(args[2]);
 		if(m.loops==0) {System.exit(2);}
+		m.readSeedIndex(args[5]);
+		m.buildRnd(args[4]);		
+		m.readInput(args[0]);
 		
-		m.readFile(args[0]);		
 		m.clearMarket(m);		
-		m.writeFile(args[1]);
+		m.writeOutput(args[1]);
 		m.writeLog(args[3]);
+		m.writeSeedIndex(args[5]);
 
-		{System.exit(0);}
+		System.exit(0);	
 	}
+	
+	private void readSeedIndex(String inFile) {
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileReader(inFile));
+			sc.useDelimiter(System.getProperty("line.separator"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    	String line=sc.next();	    	
+	    	this.curRndIndex=Integer.parseInt(line.trim());
+	    
+	}
+	
 	
 	private void clearMarket(LandMarketMain m) {
 		
@@ -68,6 +100,21 @@ public class LandMarketMain {
 		}
 		
 		System.out.println("-- NumOfSellers:"+sellers.size() + "  NumOfBuyers:"+buyers.size());
+		
+		//get random numbers
+		//HashMap<String,Double> sellers_score = 
+				
+		//		(ArrayList<Double>) this.rnd.subList(this.curRndIndex, this.curRndIndex+sellers.size());
+		for(String f: sellers) {sellers_score=*((double)this.farmInput.get(f).getWtp());}
+		this.curRndIndex=+sellers.size();
+		
+		ArrayList<Double> buyers_score = (ArrayList<Double>) this.rnd.subList(this.curRndIndex, this.curRndIndex+buyers.size());
+		this.curRndIndex=+buyers.size();
+		
+		
+		//get sorted buyers
+		ArrayIndexComparator comparator = new ArrayIndexComparator(sellers_order);
+		
 		
 		for(int i=0;i<m.loops;i++) {
 			
@@ -121,7 +168,7 @@ public class LandMarketMain {
 		
 	}
 	
-	private void writeFile(String outFile) {
+	private void writeOutput(String outFile) {
 		String r = "";
 		for(String f :this.farmOutput.keySet()) {
 			FarmOutputProperties fop = this.farmOutput.get(f);
@@ -142,6 +189,33 @@ public class LandMarketMain {
 		}
 	}
 	
+	private void buildRnd(String inFile) {
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileReader(inFile));
+			sc.useDelimiter(System.getProperty("line.separator"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	    while (sc.hasNext()){
+	    	String line=sc.next();	    	
+	    	this.rnd.add(Double.valueOf(line));
+	    }
+	}
+	
+	private void writeSeedIndex(String outFile) {
+
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+	              new FileOutputStream(outFile), "utf-8"))) {
+		   writer.write(String.valueOf(this.curRndIndex));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private void writeLog(String outFile) {
 		try(  PrintWriter out = new PrintWriter(outFile)  ){
 		    out.println( this.logResult );
@@ -151,7 +225,7 @@ public class LandMarketMain {
 		}
 	}
 
-	private void readFile(String inFile) {
+	private void readInput(String inFile) {
 		Scanner sc = null;
 		try {
 			sc = new Scanner(new FileReader(inFile));
@@ -248,6 +322,67 @@ public class LandMarketMain {
 		}
 		
 		
+	}
+	
+	private class ArrayIndexComparator implements Comparator<Integer>
+	{
+	    private final Double[] array;
+
+	    public ArrayIndexComparator(Double[] array)
+	    {
+	        this.array = array;
+	    }
+
+	    public Integer[] createIndexArray()
+	    {
+	        Integer[] indexes = new Integer[array.length];
+	        for (int i = 0; i < array.length; i++)
+	        {
+	            indexes[i] = i; // Autoboxing
+	        }
+	        return indexes;
+	    }
+
+	    @Override
+	    public int compare(Integer index1, Integer index2)
+	    {
+	         // Autounbox from Integer to int to use as array indexes
+	        return array[index1].compareTo(array[index2]);
+	    }
+	}
+	
+	private class participationScore  {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+
+		public participationScore (HashMap<String,FarmInputProperties> fp,String cmd) {
+			for(String f: fp.keySet()) {
+				if(cmd=="WTA") {
+					Float fl = fp.get(f).getWta();
+					Double d = new Double(fl.floatValue());
+					this.put(f, d);
+				}
+				else {
+					Float fl = fp.get(f).getWtp();
+					Double d = new Double(fl.floatValue());
+					this.put(f, d);
+				}
+				
+			}
+		}
+		
+		
+		public void calculateScore(Double[] rnd) {
+			for(String f: this.keySet()) {
+				ind = this.ke
+				Double val = this.get(f)*rnd[this.get(f).]
+				this.put(f, value)
+			}
+		}
 	}
 	
 	 
