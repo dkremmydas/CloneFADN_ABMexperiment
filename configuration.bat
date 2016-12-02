@@ -14,12 +14,12 @@ SET LOGDIR=log
 
 
 
-SET repetitions=1
-SET YEARS=2
+SET repetitions=15
+SET YEARS=10
 set FARM_NUM=2000
-set SAMPLES=200
+set SAMPLES=20
 
 SET randomNumbersPerRepetition_Prices=200
 
-SET randomNumbersPerRepetition_LandMarket=19000
+SET randomNumbersPerRepetition_LandMarket=90000
 set LMiterations=1000 
