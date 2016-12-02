@@ -68,4 +68,7 @@ results('initialData','0',f,"farm_active")=farm_active(f);
 
 execute_unload "./data/data.gdx" rql,vc,sfp,LaO,Lb,Wc,wl,age,consN,fmembers,farm_active;
 
+*for logging
+execute_unload "./%log%/data.full.gdx" rql,vc,sfp,LaO,Lb,Wc,wl,age,consN,fmembers,farm_active; 
+
 execute_unload "./data/results.gdx",results;

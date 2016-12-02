@@ -1,5 +1,3 @@
-@ECHO OFF
-
 
 SET Rscript="C:\Program Files\R\R-3.3.1\bin\Rscript.exe"
 
@@ -10,14 +8,18 @@ SET GAMS_ROOT=C:\GAMS\win64\24.0
 
 set GAMS="%GAMS_ROOT%\gams.exe"
 
+::create current directory with double backslash
+SET ccd=%cd:\=\\%
+SET LOGDIR=log
 
 
-SET repetitions=12
-SET YEARS=6
+
+SET repetitions=1
+SET YEARS=2
 set FARM_NUM=2000
 set SAMPLES=200
 
 SET randomNumbersPerRepetition_Prices=200
 
-SET randomNumbersPerRepetition_LandMarket=400
+SET randomNumbersPerRepetition_LandMarket=19000
 set LMiterations=1000 

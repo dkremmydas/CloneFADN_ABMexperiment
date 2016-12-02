@@ -8,15 +8,16 @@
 ::SET GAMS_ROOT=C:\GAMS\win64\24.0 -> SET at configuration.bat
 
 set RESULTS_FOLDER=".\results\full\"
+set ROUND=%1
 
-cls
 
 echo ------------------------------------------------------------
+echo SIMULATION WITH ALL FARMS
 echo Initializing Data
 echo ------------------------------------------------------------
 
 :: Run init data
-%GAMS% initData.gms o=".\lst\initData.lst"
+%GAMS% initData.full.gms o=".\%LOGDIR%\initData.full.%ROUND%.lst" --log=%LOGDIR% Lf=".\%LOGDIR%\initData.full.%ROUND% .log" Lo=2
 
 :: Loop simulation years
 for /l %%t in (1, 1, %YEARS%) do (
@@ -28,19 +29,19 @@ for /l %%t in (1, 1, %YEARS%) do (
 
    echo.
    echo ----------------------Crop Plan Phase
-   %GAMS% crop_plan.gms --t=%%t o=".\lst\crop_plan.%%t.lst" Lf=".\log\crop_plan.%%t.log"
+   %GAMS% crop_plan.gms --t=%%t o=".\%LOGDIR%\crop_plan.%%t.lst" Lf=".\%LOGDIR%\crop_plan.full.%%t.log" Lo=2
    
    echo.
    echo ----------------------Production Realization Phase
-   java -jar "%cd%/productionRealization.jar" "./data/crops.txt" "./data/yields.txt" "./data/prices.txt" "./data/rnd/%1.txt" "./data/rnd/%1.pointer.txt"
+   java -jar "%cd%/productionRealization.jar" "./data/crops.txt" "./data/yields.txt" "./data/prices.txt" "./data/rnd/%ROUND%.prices.txt" "./data/rnd/%ROUND%.prices.pointer.txt"
    
    echo.
    echo ----------------------Update Accounts Phase
-   %GAMS% update_accounts.gms --t=%%t o=".\lst\update_accounts.%%t.lst" Lf=".\log\update_accounts.%%t.log"
+   %GAMS% update_accounts.gms --t=%%t o=".\%LOGDIR%\update_accounts.%%t.lst" Lf=".\%LOGDIR%\update_accounts.full.%%t.log" Lo=2
    
    echo.
    echo ----------------------LandMarket Phase
-   java -jar "%cd%/landMarket.jar" "./data/LandMarket.input.txt" "./data/landMarket.output.txt" %LMiterations% "./lst/landMarket.%%t.txt"
+   java -jar "%cd%/landMarket.jar" "./data/LandMarket.input.txt" "./data/landMarket.output.txt" %LMiterations% "./%LOGDIR%/landMarket.%%t.txt" "./data/rnd/%ROUND%.lm.txt" "./data/rnd/%ROUND%.lm.pointer.txt"
    
 )
 
@@ -49,4 +50,4 @@ echo ------------------------------------------------------------
 echo Transforming Results
 echo ------------------------------------------------------------
 
- %GAMS% write_results_forR.gms --t=%YEARS% --RES=%RESULTS_FOLDER% --REP=%1
+ %GAMS% write_results_forR.gms o=".\%LOGDIR%\write_results_forR.full.%ROUND%.lst" --t=%YEARS% --RES=%RESULTS_FOLDER% --REP=%ROUND%

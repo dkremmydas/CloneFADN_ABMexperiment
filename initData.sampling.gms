@@ -20,7 +20,7 @@ farm_active(f)=1;
 
 *Prepare data
 parameter xlData(f,*,*);
-$call "Gdxxrw ./data/data.2000.xlsx output=tmp1 par=xlData Rng=template!A1:L2004 cdim=2 rdim=1" 
+$call "Gdxxrw ./data/data.2000.xlsx output=tmp1 par=xlData Rng=template!A1:L2004 cdim=2 rdim=1"
 $GDXin tmp1.gdx
 $load xlData
 $GDXIN
@@ -91,5 +91,8 @@ results('initialData','0',f,"farm_active")=farm_active(f);
 
 
 execute_unload "./data/data.gdx" rql,vc,sfp,LaO,Lb,Wc,wl,age,consN,fmembers,farm_active;
+
+*for logging
+execute_unload "./%log%/data.sample.gdx" rql,vc,sfp,LaO,Lb,Wc,wl,age,consN,fmembers,farm_active;
 
 execute_unload "./data/results.gdx",results;
