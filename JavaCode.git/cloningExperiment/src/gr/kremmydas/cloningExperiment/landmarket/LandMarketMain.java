@@ -1,16 +1,19 @@
 package gr.kremmydas.cloningExperiment.landmarket;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -36,8 +39,9 @@ public class LandMarketMain {
 	 * @param args 1st:the input file containing farm data, 2nd:the output file, 3nd:number of loops, 4th:log file
 	 */
 	
-	private HashMap<String,FarmInputProperties> farmInput = new HashMap<>();
-	private HashMap<String,FarmOutputProperties> farmOutput = new HashMap<>();
+	private int numOfFarms;
+	private FarmInputProperties[] farmInput;
+	private FarmOutputProperties[] farmOutput;
 	private int loops;
 	private String logResult="loop\tb_id\twtp\ts_id\twta\tland\tprice\tcash";
 	
@@ -61,10 +65,15 @@ public class LandMarketMain {
 		m.loops = Integer.parseInt(args[2]);
 		if(m.loops==0) {System.exit(2);}
 		m.readSeedIndex(args[5]);
-		m.buildRnd(args[4]);		
+		m.buildRnd(args[4]);
+		try {
+			m.numOfFarms = countLines(args[0]);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		m.readInput(args[0]);
 		
-		m.clearMarket(m);		
+		m.clearMarket();		
 		m.writeOutput(args[1]);
 		m.writeLog(args[3]);
 		m.writeSeedIndex(args[5]);
@@ -88,78 +97,83 @@ public class LandMarketMain {
 	}
 	
 	
-	private void clearMarket(LandMarketMain m) {
+	private void clearMarket() {
 		
-		ArrayList<String> sellers = new ArrayList<>();
-		ArrayList<String> buyers = new ArrayList<>();
+		ArrayList<Integer> sellers = new ArrayList<>();
+		ArrayList<Integer> buyers = new ArrayList<>();
 		
 		//construct sellers-buyers list
-		for(String f : m.farmInput.keySet()) {
-			if(m.farmInput.get(f).LandSupply>0) {sellers.add(f);}
-			if(m.farmInput.get(f).LandDemand>0) {buyers.add(f);}
+		for(int f=0;f<this.numOfFarms;f++) {
+			if(this.farmInput[f].LandSupply>0) {sellers.add(f);}
+			if(this.farmInput[f].LandDemand>0) {buyers.add(f);}
 		}
 		
 		System.out.println("-- NumOfSellers:"+sellers.size() + "  NumOfBuyers:"+buyers.size());
 		
-		//get random numbers
-		//HashMap<String,Double> sellers_score = 
-				
-		//		(ArrayList<Double>) this.rnd.subList(this.curRndIndex, this.curRndIndex+sellers.size());
-		for(String f: sellers) {sellers_score=*((double)this.farmInput.get(f).getWtp());}
-		this.curRndIndex=+sellers.size();
-		
-		ArrayList<Double> buyers_score = (ArrayList<Double>) this.rnd.subList(this.curRndIndex, this.curRndIndex+buyers.size());
-		this.curRndIndex=+buyers.size();
-		
-		
-		//get sorted buyers
-		ArrayIndexComparator comparator = new ArrayIndexComparator(sellers_order);
+		//get sellers score
+		int sellers_size=sellers.size();
+		double[] sellers_score = new double[sellers_size];
+		for(int s=0;s<sellers_size;s++) {
+			sellers_score[s]=this.rnd.get(this.curRndIndex)*this.farmInput[sellers.get(s)].getWta();
+			this.curRndIndex++;
+		}
+		//get sorted sellers by score
+		ArrayIndexComparator sellersComparator = new ArrayIndexComparator(sellers_score);
+		Integer[] sellers_indexes = sellersComparator.createIndexArray();
+		Arrays.sort(sellers_indexes, sellersComparator);
 		
 		
-		for(int i=0;i<m.loops;i++) {
+		//get buyers score
+		int buyers_size=sellers.size();
+		double[] buyers_score = new double[buyers_size];
+		for(int s=0;s<buyers_size;s++) {
+			buyers_score[s]=this.rnd.get(this.curRndIndex)*this.farmInput[buyers.get(s)].getWtp();
+			this.curRndIndex++;
+		}
+		//get sorted buyers by score
+		ArrayIndexComparator buyersComparator = new ArrayIndexComparator(buyers_score);
+		Integer[] buyers_indexes = buyersComparator.createIndexArray();
+		Arrays.sort(buyers_indexes, buyersComparator);
+		
+		
+		if(this.loops>buyers_size) this.loops=buyers_size;
+		if(this.loops>sellers_size) this.loops=sellers_size;
+			
+		for(int i=0;i<this.loops;i++) {
 			
 			this.logResult+=System.getProperty("line.separator")+String.valueOf(i)+"\t";
 			
 			//System.out.println();System.out.println("Loop:"+i);
 			
-			//if no sellers or no buyers then exit
-			if(sellers.isEmpty() || buyers.isEmpty()) {break;}
+			//select the next pair
+			int bf = buyers.get(buyers_indexes[i]); 
+			int sf = sellers.get(sellers_indexes[i]);
 			
-			
-			//select a random buyer-farm
-			String bf = buyers.get(new Random().nextInt(buyers.size()));
-			this.logResult+=bf+"\t"+this.farmInput.get(bf).getWtp()+"\t";
-			
-			//select a random seller-farm
-			String sf = sellers.get(new Random().nextInt(sellers.size()));
-			this.logResult+=sf+"\t"+this.farmInput.get(sf).getWta()+"\t";
+			this.logResult+=bf+"\t"+this.farmInput[bf].getWtp()+"\t";
+			this.logResult+=sf+"\t"+this.farmInput[sf].getWta()+"\t";
 			
 			if(sf==bf) {continue;}
 			
 			//System.out.println("Bf:"+bf+ " wtp:"+farmInput.get(bf).getWtp()+ " / Sf:"+sf+" wta:"+farmInput.get(sf).getWta());
 			
 			//if buyer-WTP>seller-WTA get a random price between and make the transaction
-			if(farmInput.get(bf).getWtp()>farmInput.get(sf).getWta()) {
+			if(farmInput[bf].getWtp()>farmInput[sf].getWta()) {
 				//transaction means to update farmOutput and adjust farmInput and sellers/buyers list
-				float landTrans = (farmInput.get(bf).getLandDemand()<farmInput.get(sf).getLandSupply())?farmInput.get(bf).getLandDemand():farmInput.get(sf).getLandSupply();
-				float price = farmInput.get(bf).getWtp()-(farmInput.get(bf).getWtp()-farmInput.get(sf).getWta())*(new Random().nextFloat());
+				float landTrans = (farmInput[bf].getLandDemand()<farmInput[sf].getLandSupply())?farmInput[bf].getLandDemand():farmInput[sf].getLandSupply();
+				float price = farmInput[bf].getWtp()-(farmInput[bf].getWtp()-farmInput[sf].getWta())*(new Random().nextFloat());
 
 				this.logResult+=landTrans+"\t"+price+"\t"+(landTrans*price);
 				
 				//update demand supply
-				farmInput.get(bf).setLandDemand(farmInput.get(bf).getLandDemand()-landTrans);
-				farmInput.get(sf).setLandSupply(farmInput.get(sf).getLandSupply()-landTrans);
-				
-				//update buyers/sellers list
-				if(farmInput.get(bf).getLandDemand()<0.1) {buyers.remove(bf);}
-				if(farmInput.get(sf).getLandSupply()<0.1) {sellers.remove(sf);}
-				
+				farmInput[bf].setLandDemand(farmInput[bf].getLandDemand()-landTrans);
+				farmInput[sf].setLandSupply(farmInput[sf].getLandSupply()-landTrans);
+						
 				//update cash
-				farmOutput.get(bf).setCash(-1*(landTrans*price));
-				farmOutput.get(bf).setRentedIn(landTrans);
+				farmOutput[bf].setCash(-1*(landTrans*price));
+				farmOutput[bf].setRentedIn(landTrans);
 				
-				farmOutput.get(sf).setCash(landTrans*price);
-				farmOutput.get(sf).setRentedOut(landTrans);
+				farmOutput[sf].setCash(landTrans*price);
+				farmOutput[sf].setRentedOut(landTrans);
 			}
 			else {
 				this.logResult+="NA\tNA\tNA";
@@ -170,8 +184,8 @@ public class LandMarketMain {
 	
 	private void writeOutput(String outFile) {
 		String r = "";
-		for(String f :this.farmOutput.keySet()) {
-			FarmOutputProperties fop = this.farmOutput.get(f);
+		for(int f=0;f<this.numOfFarms;f++) {
+			FarmOutputProperties fop = this.farmOutput[f];
 			String format="LandMarketOut('%s','%s')=%.3f;";
 			r += String.format(format, f,"rentIn",fop.getRentedIn());
 			r += String.format(format, f,"rentOut",fop.getRentedOut());
@@ -226,21 +240,48 @@ public class LandMarketMain {
 	}
 
 	private void readInput(String inFile) {
+		this.farmInput = new FarmInputProperties[this.numOfFarms];
+		this.farmOutput = new FarmOutputProperties[this.numOfFarms];
 		Scanner sc = null;
 		try {
 			sc = new Scanner(new FileReader(inFile));
 			sc.useDelimiter(System.getProperty("line.separator"));
+			
+			String[] split=new String[5];
+			int count=0;
+		    while (sc.hasNext()){
+		    	String line=sc.next();	    	
+		    	split = line.split("\\t");
+		        farmInput[count]= new FarmInputProperties(split[1], split[2], split[3], split[4]);
+		        farmOutput[count]= new FarmOutputProperties(0,0,0);
+		        count++;
+		    }
+		    
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		String[] split=new String[5];
-	    while (sc.hasNext()){
-	    	String line=sc.next();	    	
-	    	split = line.split("\\t");
-	        farmInput.put(split[0].trim(), new FarmInputProperties(split[1], split[2], split[3], split[4]));
-	        farmOutput.put(split[0].trim(), new FarmOutputProperties(0,0,0));
+		
+	}
+	
+	private static int countLines(String filename) throws IOException {
+	    InputStream is = new BufferedInputStream(new FileInputStream(filename));
+	    try {
+	        byte[] c = new byte[1024];
+	        int count = 0;
+	        int readChars = 0;
+	        boolean empty = true;
+	        while ((readChars = is.read(c)) != -1) {
+	            empty = false;
+	            for (int i = 0; i < readChars; ++i) {
+	                if (c[i] == '\n') {
+	                    ++count;
+	                }
+	            }
+	        }
+	        return (count == 0 && !empty) ? 1 : count;
+	    } finally {
+	        is.close();
 	    }
 	}
 	
@@ -326,9 +367,9 @@ public class LandMarketMain {
 	
 	private class ArrayIndexComparator implements Comparator<Integer>
 	{
-	    private final Double[] array;
+	    private final double[] array;
 
-	    public ArrayIndexComparator(Double[] array)
+	    public ArrayIndexComparator(double[] array)
 	    {
 	        this.array = array;
 	    }
@@ -347,43 +388,11 @@ public class LandMarketMain {
 	    public int compare(Integer index1, Integer index2)
 	    {
 	         // Autounbox from Integer to int to use as array indexes
-	        return array[index1].compareTo(array[index2]);
+	    	return Double.compare(array[index1], array[index2]);
 	    }
 	}
 	
-	private class participationScore  {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-
-		public participationScore (HashMap<String,FarmInputProperties> fp,String cmd) {
-			for(String f: fp.keySet()) {
-				if(cmd=="WTA") {
-					Float fl = fp.get(f).getWta();
-					Double d = new Double(fl.floatValue());
-					this.put(f, d);
-				}
-				else {
-					Float fl = fp.get(f).getWtp();
-					Double d = new Double(fl.floatValue());
-					this.put(f, d);
-				}
-				
-			}
-		}
-		
-		
-		public void calculateScore(Double[] rnd) {
-			for(String f: this.keySet()) {
-				ind = this.ke
-				Double val = this.get(f)*rnd[this.get(f).]
-				this.put(f, value)
-			}
-		}
-	}
+	
 	
 	 
 	
