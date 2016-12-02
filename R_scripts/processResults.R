@@ -3,13 +3,20 @@ library(plyr);
 library(ggplot2);
 library(scales);
 
-root='../results/RUN.years7-samples200.20161202_01/';
+root='../results/RUN.years10-samples20.20161202_02/';
 root.sample=paste(root,'sample/',sep="");
 root.full=paste(root,'full/',sep="");
 
-rep=12; #number of repetitions
+rep=7; #number of repetitions
 
-
+doCast<-function(d,varName,func) {
+  a=dcast(d,value.var = "value",time+type+rep~variable,func);
+  a2=melt(a,id.vars = c("time","type","rep"));
+  if(!is.null(varName)) {
+    a2$variable=varName;
+  }
+  return(a2);
+}
 
 #load all data in land market
 d.all.lm=data.frame(rep=numeric(),time=numeric(),type=factor(),variable=factor(),value=numeric());
@@ -18,10 +25,102 @@ for(r in c(1:rep)) {
   d.full = read.table(paste(root.full,"landMarket.",r,".txt", sep=""),sep="\t",header = T)
   d.sample$type="sample";d.full$type="full";
   d.full$rep=r;d.sample$rep=r;
-  d.all.lm=rbind(d.all.lm,d.full,d.sample);
+  
+  ##full
+  #calculate sums of Ld,Ls,rentIn,rentOut
+  a=doCast(d.full[d.full$variable%in%c("Ld","Ls","rentIn","rentOut"),],NULL,sum);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate Mean of wta>0
+  a=doCast(d.full[d.full$variable=="wta" & d.full$value>0,],"wta_mean+",mean);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate sd of wta>0
+  a=doCast(d.full[d.full$variable=="wta" & d.full$value>0,],"wta_sd+",sd);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate length of wta
+  a=doCast(d.full[d.full$variable=="wta" & d.full$value>0,],"wta_farms+",length);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate Mean of wtp>0
+  a=doCast(d.full[d.full$variable=="wtp" & d.full$value>0,],"wtp_mean+",mean);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate sd of wtp>0
+  a=doCast(d.full[d.full$variable=="wtp" & d.full$value>0,],"wtp_sd+",sd);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate length of wtp>
+  a=doCast(d.full[d.full$variable=="wtp" & d.full$value>0,],"wtp_farms+",length);
+  d.all.lm=rbind(d.all.lm,a);
+
+  #calculate Mean of cash>0
+  a=doCast(d.full[d.full$variable=="cash" & d.full$value>0,],"cash_mean+",mean);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate sd of cash>0
+  a=doCast(d.full[d.full$variable=="cash" & d.full$value>0,],"cash_sd+",sd);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate length of cash>0
+  a=doCast(d.full[d.full$variable=="cash" & d.full$value>0,],"cash_farms+",length);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  ##sample
+  #calculate sums of Ld,Ls,rentIn,rentOut
+  a=doCast(d.sample[d.sample$variable%in%c("Ld","Ls","rentIn","rentOut"),],NULL,sum);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate Mean of wta>0
+  a=doCast(d.sample[d.sample$variable=="wta" & d.sample$value>0,],"wta_mean+",mean);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate sd of wta>0
+  a=doCast(d.sample[d.sample$variable=="wta" & d.sample$value>0,],"wta_sd+",sd);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate length of wta
+  a=doCast(d.sample[d.sample$variable=="wta" & d.sample$value>0,],"wta_farms+",length);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate Mean of wtp>0
+  a=doCast(d.sample[d.sample$variable=="wtp" & d.sample$value>0,],"wtp_mean+",mean);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate sd of wtp>0
+  a=doCast(d.sample[d.sample$variable=="wtp" & d.sample$value>0,],"wtp_sd+",sd);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate length of wtp>
+  a=doCast(d.sample[d.sample$variable=="wtp" & d.sample$value>0,],"wtp_farms+",length);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate Mean of cash>0
+  a=doCast(d.sample[d.sample$variable=="cash" & d.sample$value>0,],"cash_mean+",mean);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate sd of cash>0
+  a=doCast(d.sample[d.sample$variable=="cash" & d.sample$value>0,],"cash_sd+",sd);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  #calculate length of cash>0
+  a=doCast(d.sample[d.sample$variable=="cash" & d.sample$value>0,],"cash_farms+",length);
+  d.all.lm=rbind(d.all.lm,a);
+  
+  
 }
-d.all.lm.sumf=dcast(d.all.lm,value.var = "value",time+type+rep+variable~value,sum);
-ggplot(data=d.all.lm.sumf, #line of land market properties
+
+#plot LOG of Ld+Ls+rentIn
+ggplot(data=d.all.lm[d.all.lm$variable%in%c("Ld","Ls","rentIn"),], #line of land market properties
+       aes(x=time,
+           y=log(value))
+)+
+  geom_line(aes(color=rep,group=rep))+
+  facet_grid(type+.~variable);
+
+#plot wta-wtp-cash
+ggplot(data=d.all.lm[d.all.lm$variable%in%c("wta_mean+","wtp_mean+","cash_mean+"),], #line of land market properties
        aes(x=time,
            y=value)
 )+
@@ -109,66 +208,8 @@ g1=ggplot(data=fp.comp.abs[fp.comp.abs$variable %in% c("cp_COT","cp_DW","cp_MZE"
 
 g1
 
-ggplot(data=fp.comp.abs, #boxplot of diff in log scle
-       aes(x=time,
-           color=rep,
-           y=log(value))
-)+
-  geom_point()+geom_jitter()+
-  facet_grid(.~variable);
-
-ggplot(data=fp.comp.abs, #boxplot of diff
-       aes(x=time,
-           color=time,
-           y=value)
-)+
-  geom_violin()+
-  facet_grid(.~variable+time);
 
 
-#############################
-#PLOT CROP PLAN TIME SERIES
-#############################
 
-############### 
-#Price
-ggplot(data=d3[d3$variable=="price",],
-       aes(x=time,
-           color=crop,
-           y=value)
-)+
-  geom_line()+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  ylab("PRICE");
 
-############### 
-#plot crop plan aggregates (line)
-ggplot(data=melt(cpt,id.vars = "time"),
-       aes(x=time,
-           color=variable,
-           y=value)
-)+
-  geom_line()+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  ylab("Production in Tonnes");
 
-###############
-#plot crop plan aggregates (stacked bar)
-ggplot(data=melt(cpt,id.vars = "time"),
-       aes(x=time,
-           fill=variable,
-           y=value)
-)+
-  geom_bar(position = "fill",stat = "identity") + 
-  scale_y_continuous(labels = percent_format())+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  ylab("Production in Tonnes");
-
-###############
-#plot crop plan aggregates (stacked bar) + prices
-ggplot()+
-  geom_bar(data=melt(cpt,id.vars = "time"),aes(x=time,fill=variable,y=value),position = "fill",stat = "identity")+
-  geom_line(data=d3[d3$variable=="price",],aes(x=time,color=crop,y=value))+ 
-  scale_y_continuous(labels = percent_format())+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
-  ylab("Production in Tonnes");
